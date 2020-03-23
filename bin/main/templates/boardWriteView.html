@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title></title>
+</head>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.8.0/css/bulma.min.css">
+<script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
+<script type="text/javascript">
+ function writeAction(){
+	 
+	 document.boardFrm.method = "post";
+     document.boardFrm.action = "/boardWriteAction";
+     document.boardFrm.submit();
+ }
+</script>
+<body>
+    
+    <form name ="boardFrm">
+        <table class="table">
+            <tr>
+                <th>제목 : </th>
+                <th><input type="text" style="width: 250px" name="subject"></th>
+                <th>작성자 : </th>
+                <th align="left"><input type="text" name="wname"></th>
+            </tr>
+            <tr>
+                <th colspan="4">
+                    <textarea rows="30" cols="150" name="content"></textarea>
+                </th>
+            </tr>
+            <tr>
+                <th colspan="4" align="right">
+                    <a class="button is-primary" onclick="javascript:history.back()">돌아가기</a>
+                    <a class="button is-primary" onclick="javascript:writeAction()">글쓰기</a>
+                </th>
+                <th>
+                </th>
+            </tr>
+        </table>
+    </form>
+</body>
+</html>

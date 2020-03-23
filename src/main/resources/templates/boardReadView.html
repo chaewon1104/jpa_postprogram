@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title></title>
+</head>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.8.0/css/bulma.min.css">
+<script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
+<script type="text/javascript">
+ function boarUpdateView(){
+     document.boardFrm.action = "/boarUpdateView";
+     document.boardFrm.submit();
+ }
+</script>
+<body>
+    
+    <form name ="boardFrm">
+        <table class="table">
+            <tr>
+                <th>제목 : </th>
+                <th th:text="${boardEnty.subject}"></th>
+                <th>작성자 : </th>
+                <th align="left" th:text="${boardEnty.wname}"></th>
+            </tr>
+            <tr>
+                <th colspan="4" th:text="${boardEnty.content}" width="1050" height="650"></th>
+            </tr>
+            <tr>
+                <th colspan="4" align="right">
+                    <a class="button is-primary" onclick="javascript:history.back()">돌아가기</a>
+                    <a class="button is-primary" onclick="javascript:boarUpdateView()">수정하기</a>
+                </th>
+                <th>
+                </th>
+            </tr>
+        </table>
+    </form>
+</body>
+</html>

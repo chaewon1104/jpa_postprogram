@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title></title>
+</head>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.8.0/css/bulma.min.css">
+<script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
+<script type="text/javascript">
+function boardReadView(bbsno){
+    document.boardList.bbsno.value = bbsno;
+    document.boardList.action = "/boardReadView";
+    document.boardList.method = "post";
+    document.boardList.submit(); 
+}
+
+function boardWriteView(){
+    document.boardList.action = "/boardWriteView";
+    document.boardList.method = "post";
+    document.boardList.submit(); 
+}
+</script>
+<body>
+    <form name="boardList">
+    <input type="hidden" name="bbsno">
+        <table width="100%">
+            <tr>
+                <td align="center" height="30"></td>
+            </tr>
+        </table>
+        <table class="table" width="90%" align="center">
+            <thead>
+                <tr>
+                    <th width="10%">순번</th>
+                    <th width="40%" align="center">제목</th>
+                    <th width="25%">작성자</th>
+                    <th width="25%">작성일</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="board : ${listBoard}" th:onclick="|javascript:boardReadView('${board.bbsno}')|" onmouseover="this.className='is-selected'" onmouseout="this.className=''">   
+                    <th th:text="${board.bbsno}"></th>
+                    <th th:text="${board.subject}"></th>
+                    <th th:text="${board.wname}"></th>
+                    <th th:text="${board.regdt}"></th>
+                </tr>
+            </tbody>
+        </table>
+        <table width="100%">
+            <tr>
+                <td colspan="2" align="right" height="10">
+                </td>
+            </tr>
+            <tr>
+                <td align="right">
+                    <a class="button is-primary" onclick="javascript:boardWriteView()">글쓰기</a>
+                </td>
+                <td width="30"></td>
+            </tr>
+        </table>
+    </form>
+</body>
+</html>
