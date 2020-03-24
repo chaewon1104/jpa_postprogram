@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.spring.jpa.domain.Board;
 import com.spring.jpa.domain.BoardRepository;
+//import com.spring.jpa.domain.LoginRepository;
+import com.spring.jpa.domain.Login_info;
 import com.spring.jpa.service.BoardService;
 
 
@@ -26,6 +28,8 @@ public class BoardController {
 
 	@Autowired
 	BoardRepository boardRepository;
+	//@Autowired
+	//LoginRepository loginrepository;
 	
 	@Autowired
 	BoardService boardService;
@@ -39,6 +43,7 @@ public class BoardController {
 
 		return "boardListView";
 	}
+	
 	
 	
 	/*
@@ -86,5 +91,33 @@ public class BoardController {
 
         return "boardListViewPaging";
     }
+	
+	
+	
+//	//회원가입창으로 넘어가는 화면
+//	@RequestMapping(value = "/GotoClientRegistration", method = { RequestMethod.POST, RequestMethod.GET })
+//    public String GotoClientRegistration(Model model) {
+//        return "boardClientRegister.html";
+//    }
+//	
+//	//회원가입 이후 넘어가는 화면
+//	@RequestMapping(value = "/registClientAction", method = { RequestMethod.POST, RequestMethod.GET })
+//	public String registClientAction(HttpServletRequest req) {
+//
+//		
+//		Login_info logininfo=new Login_info();
+//		
+//		logininfo.setName(req.getParameter("name"));
+//		logininfo.setBirthday(req.getParameter("birthday"));
+//		logininfo.setId(req.getParameter("id"));
+//		logininfo.setPassword(req.getParameter("password"));
+//		logininfo.setSex(req.getParameter("sex"));
+//		logininfo.setPhoneNum(req.getParameter("phoneNum"));
+//		
+//
+//		//loginrepository.save(logininfo);
+//
+//		return "redirect:/boardListView";
+//	}
 	
 }

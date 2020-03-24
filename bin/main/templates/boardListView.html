@@ -19,10 +19,27 @@ function boardWriteView(){
     document.boardList.method = "post";
     document.boardList.submit(); 
 }
+function GotoClientRegistration(){
+	 document.boardList.action = "/GotoClientRegistration";
+	 document.boardList.method = "post";
+	 document.boardList.submit(); 
+}
 </script>
 <body>
     <form name="boardList">
     <input type="hidden" name="bbsno">
+    <table width="100%">
+            <tr>
+                <td colspan="2" align="right" height="10">
+                </td>
+            </tr>
+            <tr>
+                <td align="right">
+                    <a class="button is-primary" onclick="javascript:GotoClientRegistration()">회원가입</a>
+                </td>
+                <td width="30"></td>
+            </tr>
+        </table>
         <table width="100%">
             <tr>
                 <td align="center" height="30"></td>

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title></title>
+</head>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.8.0/css/bulma.min.css">
+<script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
+<script type="text/javascript">
+ function registClientAction(){	 
+	 document.boardFrm.method = "post";
+     document.boardFrm.action = "/registClientAction";
+     document.boardFrm.submit();
+ }
+</script>
+
+
+
+<body>
+    
+    <form name ="registerFrom">
+        <table class="table">
+            <tr>
+                <th>이름 :</th>
+                <th><input type="text" style="width: 250px" name="name"></th>
+      
+            </tr>
+            <tr>
+            	<th>성별 :</th>
+            	<th align="left"><input type="radio" id="male" name="sex" value="male"> 남</input></th>            	
+            </tr>
+            <tr>
+            	<th>주민등록번호 :</th>
+            	<th align="left"><input type="date" style="width: 250px" value="" min="2000-01-01" name="birthday"></th>
+            	
+            </tr>
+            <tr>
+            	<th>아이디 :</th>
+            	<th align="left"><input type="text" style="width: 250px" value="" name="id"></th>
+            	
+            </tr>
+            <tr>
+            	<th>비밀번호 :</th>
+            	<th align="left"><input type="password" style="width: 250px" value="" name="password"></th>
+            	
+            </tr>
+            <tr>
+            	<th>비밀번호확인 :</th>
+            	<th align="left"><input type="password" style="width: 250px" value="" name="password"></th>
+            	
+            </tr>     
+            <tr>
+            	<th>휴대폰번호 :</th>
+            	<th align="left"><input type="tel" style="width: 250px" name="phoneNum"></th>
+            	
+            </tr>         
+            <tr>
+                <th colspan="4" align="right">
+                    <a class="button is-primary" onclick="javascript:history.back()">돌아가기</a>
+                    <a class="button is-primary" onclick="javascript:registClientAction()">회원가입</a>
+                </th>
+                <th>
+                </th>
+            </tr>
+        </table>
+    </form>
+</body>
+</html>
