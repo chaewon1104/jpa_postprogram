@@ -23,7 +23,7 @@ import lombok.Setter;
 public class post {
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.SEQUENCE,generator="BBSNO_SEQ_GENERATOR")
+	//@GeneratedValue(strategy=GenerationType.SEQUENCE,generator="BBSNO_SEQ_GENERATOR")
 	
 	
 	private int bbsno;
@@ -61,6 +61,7 @@ public class post {
 	private String contentt;
 	private String writer;
 	private String daydate;
+	
 	
 	//@Temporal(TemporalType.TIMESTAMP)
 	//private Date regdt;

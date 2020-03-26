@@ -7,7 +7,6 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.8.0/css/bulma.min.css">
 <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
 <script type="text/javascript">
-alert("준비중입니다");
 function boardReadView(bbsno){
     document.boardList.bbsno.value = bbsno;
     document.boardList.action = "/boardReadView";
@@ -35,23 +34,15 @@ function GotoLogIn(){
 <body>
     <form name="boardList">
     <input type="hidden" name="bbsno">
-    <table width="100%">
-    <input type="button" value="버튼" onclick="alert('검증완료')">
+	<a class="button is-primary" align="right" onclick="javascript:GotoClientRegistration()">회원가입</a>
+ 	<a class="button is-primary" align="right" onclick="javascript:GotoLogIn()">로그인</a>
     
+    <table width="100%">
             <tr>
                 <td colspan="2" align="right" height="10">
                 </td>
             </tr>
-            <tr>
-            	<td align="right">
-                    <a class="button is-primary" onclick="javascript:GotoLogIn()">로그인</a>
-                </td>
-            
-                <td align="right">
-                    <a class="button is-primary" onclick="javascript:GotoClientRegistration()">회원가입</a>
-                </td>
-                <td width="30"></td>
-            </tr>
+
         </table>
         <table width="100%">
             <tr>
@@ -61,20 +52,18 @@ function GotoLogIn(){
         <table class="table" width="90%" align="center">
             <thead>
                 <tr>
-                    <th width="10%">아이디</th>
-                    <th width="40%" align="center">이름</th>
-                    <th width="25%">비밀번호</th>
-                    <th width="25%">생년월일</th>
-                    <th width="25%">전화번호</th>
+                    <th width="10%">순번</th>
+                    <th width="40%" align="center">제목</th>
+                    <th width="25%">작성자</th>
+                    <th width="25%">작성일</th>
                 </tr>
             </thead>
             <tbody>
-                <tr th:each="board : ${listBoard}" onmouseover="this.className='is-selected'" onmouseout="this.className=''">   
-                    <th th:text="${board.idd}"></th>
-                    <th th:text="${board.nm}"></th>
-                    <th th:text="${board.passwd}"></th>
-                    <th th:text="${board.birthday}"></th>
-                    <th th:text="${board.phonenum}"></th>
+                <tr th:each="board : ${post}" th:onclick="|javascript:boardReadView('${board.bbsno}')|" onmouseover="this.className='is-selected'" onmouseout="this.className=''">   
+                    <th th:text="${board.bbsno}"></th>
+                    <th th:text="${board.title}"></th>
+                    <th th:text="${board.writer}"></th>
+                    <th th:text="${board.daydate}"></th>
                     
                 </tr>
             </tbody>

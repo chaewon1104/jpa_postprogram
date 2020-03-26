@@ -1,4 +1,3 @@
-
 package com.spring.jpa.domain;
 
 import java.util.List;

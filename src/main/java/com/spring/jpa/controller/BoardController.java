@@ -16,7 +16,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.spring.jpa.domain.post;
+import com.spring.jpa.domain.userLogin;
 import com.spring.jpa.domain.BoardRepository;
+import com.spring.jpa.domain.PostRepository;
 import com.spring.jpa.domain.loginInfo;
 //import com.spring.jpa.domain.LoginRepository;
 //import com.spring.jpa.domain.Login_info;
@@ -27,19 +29,27 @@ public class BoardController {
 
 	@Autowired
 	BoardRepository boardRepository;
+	@Autowired
+	PostRepository postRepository;
 	// @Autowired
 	// LoginRepository loginrepository;
 
 	@Autowired
 	BoardService boardService;
 
+	userLogin userlogin;
+	
+	
+	
+	// 게시판 프로그램 첫 화면
 	@RequestMapping(value = "/boardListView", method = { RequestMethod.POST, RequestMethod.GET })
 	public String boardIndex(Model model) {
 
-		List<post> post=
-		List<loginInfo> listBoard = boardRepository.findAll();
+		List<post> post=postRepository.findAll();
+//		List<loginInfo> listBoard = boardRepository.findAll();
 //		List<loginInfofo> listBoard = boardRepository.findAll(Sort.by(Sort.Direction.DESC, "bbsno"));
-		model.addAttribute("listBoard", listBoard);
+		
+		model.addAttribute("post", post);
 
 		return "boardListView";
 	}
@@ -48,35 +58,48 @@ public class BoardController {
 	 * public Sort sortByIdAsc() { return new Sort(Sort.Direction.ASC,"bbsno"); }
 	 */
 
+
+	
+	
+	
+	
+	
+	// 게시글 작성 화면 이동 컨트롤러
 	@RequestMapping(value = "/boardWriteView", method = { RequestMethod.POST, RequestMethod.GET })
 	public String boardWriteView() {
 
 		return "boardWriteView";
 	}
 
-//	@RequestMapping(value = "/boardWriteAction", method = { RequestMethod.POST, RequestMethod.GET })
-//	public String boardWriteAction(HttpServletRequest req) {
-//
-//		Board board = new Board();
-//		board.setSubject(req.getParameter("subject"));
-//		board.setWname(req.getParameter("wname"));
-//		board.setContent(req.getParameter("content"));
-//		board.setPasswd("123");
-//		board.setReadcnt(0);
-//
-//		boardRepository.save(board);
-//
-//		return "redirect:/boardListView";
-//	}
-//
-//	@RequestMapping(value = "/boardReadView", method = { RequestMethod.POST })
-//	public String boardReadView(Model model, HttpServletRequest req) {
-//
-//		Board board = boardRepository.getOne(Integer.parseInt(req.getParameter("bbsno")));
-//		model.addAttribute("boardEnty", board);
-//
-//		return "boardReadView";
-//	}
+	
+	
+	// 게시글 db등록 컨트롤러
+	@RequestMapping(value = "/boardWriteAction", method = { RequestMethod.POST, RequestMethod.GET })
+	public String boardWriteAction(HttpServletRequest req) {
+
+		post Post = new post();
+		Post.setBbsno(Integer.parseInt(req.getParameter("bbsno")));
+		Post.setContentt(req.getParameter("contentt"));
+		Post.setDaydate(req.getParameter("daydate"));
+		Post.setTitle(req.getParameter("title"));
+		Post.setWriter(req.getParameter("writer"));
+
+		postRepository.save(Post);
+
+		return "redirect:/boardListView";
+	}
+
+	
+	
+	// 게시글 읽기 컨트롤러
+	@RequestMapping(value = "/boardReadView", method = { RequestMethod.POST })
+	public String boardReadView(Model model,HttpServletRequest req) {
+
+		post Post = postRepository.getOne(Integer.parseInt(req.getParameter("bbsno")));
+		model.addAttribute("postenty", Post);
+
+		return "boardReadView";
+	}
 //	
 //	@RequestMapping(value = "/boardListViewPaging", method = { RequestMethod.POST, RequestMethod.GET })
 //    public String boardIndexPaging(@PageableDefault Pageable pageable, Model model) {
@@ -122,14 +145,7 @@ public class BoardController {
         return "GotoLogIn.html";
     }
 
-//	@RequestMapping(value = "/checkLogin", method = { RequestMethod.POST, RequestMethod.GET })
-//    public String checkLogin(String idd,String passwd,Model model) {
-//			
-//        return "boardListView.html";
-//    }
-	
 
-	
 	
 	//로그인 확인 
 	@RequestMapping(value = "/checkLogin", method = { RequestMethod.POST, RequestMethod.GET })
@@ -147,7 +163,7 @@ public class BoardController {
 	  }else
 	  { model.addAttribute("logininfo", logininfo);
 	  model.addAttribute("msg","로그인완료"); }
-      return "boardListView";
+      return "redirect:/boardListView";
   }
 	
 	

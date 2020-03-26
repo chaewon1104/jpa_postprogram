@@ -11,6 +11,13 @@
      document.boardFrm.action = "/boarUpdateView";
      document.boardFrm.submit();
  }
+ 
+ function boardReadView(bbsno){
+	    document.boardList.bbsno.value = bbsno;
+	    document.boardList.action = "/boardReadView";
+	    document.boardList.method = "post";
+	    document.boardList.submit(); 
+	}
 </script>
 <body>
     
@@ -18,12 +25,12 @@
         <table class="table">
             <tr>
                 <th>제목 : </th>
-                <th th:text="${boardEnty.subject}"></th>
+                <th th:text="${postenty.title}"></th>
                 <th>작성자 : </th>
-                <th align="left" th:text="${boardEnty.wname}"></th>
+                <th align="left" th:text="${postenty.writer}"></th>
             </tr>
             <tr>
-                <th colspan="4" th:text="${boardEnty.content}" width="1050" height="650"></th>
+                <th colspan="4" th:text="${postenty.contentt}" width="1050" height="650"></th>
             </tr>
             <tr>
                 <th colspan="4" align="right">
