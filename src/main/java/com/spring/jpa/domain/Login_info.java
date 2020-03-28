@@ -25,21 +25,16 @@ public class Login_info {
 	@Id
 	@GeneratedValue(strategy=GenerationType.SEQUENCE,generator="Log_In_Generator")
 	
-	private int bbsno;//primarykey
+	//private int bbsno;//primarykey
 	private String name;//이름
 	private String id;	// id
 	private String password;//패스워드
 	private String birthday;//생일
-	private String sex; //성별 
+	//private String sex; //성별 
 	private String phoneNum;//전화번호
 	
 	
-	public int getBbsno() {
-		return bbsno;
-	}
-	public void setBbsno(int bbsno) {
-		this.bbsno = bbsno;
-	}
+	
 	public String getName() {
 		return name;
 	}
@@ -64,12 +59,7 @@ public class Login_info {
 	public void setBirthday(String birthday) {
 		this.birthday = birthday;
 	}
-	public String getSex() {
-		return sex;
-	}
-	public void setSex(String sex) {
-		this.sex = sex;
-	}
+
 	public String getPhoneNum() {
 		return phoneNum;
 	}

@@ -7,7 +7,14 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.8.0/css/bulma.min.css">
 <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
 <script type="text/javascript">
+/* (function (x) {
+	if(request.getAttribute("userlogin.isLogin")==true){
+	}
+	alert("로그인되었습니다.");
+	 }(2)); */
+
 function boardReadView(bbsno){
+		 
     document.boardList.bbsno.value = bbsno;
     document.boardList.action = "/boardReadView";
     document.boardList.method = "post";
@@ -31,12 +38,11 @@ function GotoLogIn(){
 	 document.boardList.submit(); 
 }
 </script>
-<body>
-    <form name="boardList">
-    <input type="hidden" name="bbsno">
+<body> 
+	<form name="boardList">
 	<a class="button is-primary" align="right" onclick="javascript:GotoClientRegistration()">회원가입</a>
  	<a class="button is-primary" align="right" onclick="javascript:GotoLogIn()">로그인</a>
-    
+    <input type="hidden" name="bbsno">
     <table width="100%">
             <tr>
                 <td colspan="2" align="right" height="10">
@@ -59,11 +65,12 @@ function GotoLogIn(){
                 </tr>
             </thead>
             <tbody>
-                <tr th:each="board : ${post}" th:onclick="|javascript:boardReadView('${board.bbsno}')|" onmouseover="this.className='is-selected'" onmouseout="this.className=''">   
+                <tr th:each="board : ${post}"  th:onclick="|javascript:boardReadView('${board.bbsno}')|" onmouseover="this.className='is-selected'" onmouseout="this.className=''">   
                     <th th:text="${board.bbsno}"></th>
                     <th th:text="${board.title}"></th>
                     <th th:text="${board.writer}"></th>
                     <th th:text="${board.daydate}"></th>
+                    
                     
                 </tr>
             </tbody>

@@ -3,14 +3,16 @@ package com.spring.jpa.domain;
 public class userLogin {
 	
 	
-	private boolean loginStatus=false;
+	private boolean isLogin=false;
 	private String writer=null;
 	
-	public boolean isLoginStatus() {
-		return loginStatus;
+	
+
+	public boolean isLogin() {
+		return isLogin;
 	}
-	public void setLoginStatus(boolean loginStatus) {
-		this.loginStatus = loginStatus;
+	public void setLogin(boolean isLogin) {
+		this.isLogin = isLogin;
 	}
 	public String getWriter() {
 		return writer;

@@ -24,8 +24,10 @@ public class post {
 
 	@Id
 	//@GeneratedValue(strategy=GenerationType.SEQUENCE,generator="BBSNO_SEQ_GENERATOR")
-	
-	
+	private String title;
+	private String contentt;
+	private String writer;
+	private String daydate;
 	private int bbsno;
 	public int getBbsno() {
 		return bbsno;
@@ -57,10 +59,7 @@ public class post {
 	public void setDaydate(String daydate) {
 		this.daydate = daydate;
 	}
-	private String title;
-	private String contentt;
-	private String writer;
-	private String daydate;
+	
 	
 	
 	//@Temporal(TemporalType.TIMESTAMP)

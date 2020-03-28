@@ -37,7 +37,7 @@ public class BoardController {
 	@Autowired
 	BoardService boardService;
 
-	userLogin userlogin;
+	userLogin userlogin=new userLogin();
 	
 	
 	
@@ -91,14 +91,14 @@ public class BoardController {
 
 	
 	
-	// 게시글 읽기 컨트롤러
+	// 게시글보기 컨트롤러
 	@RequestMapping(value = "/boardReadView", method = { RequestMethod.POST })
 	public String boardReadView(Model model,HttpServletRequest req) {
-
+		int bbsno=Integer.parseInt(req.getParameter("bbsno"));
 		post Post = postRepository.getOne(Integer.parseInt(req.getParameter("bbsno")));
+		System.out.println(Post.getWriter());
 		model.addAttribute("postenty", Post);
-
-		return "boardReadView";
+		return "boardReadView.html";
 	}
 //	
 //	@RequestMapping(value = "/boardListViewPaging", method = { RequestMethod.POST, RequestMethod.GET })
@@ -112,6 +112,11 @@ public class BoardController {
 //        return "boardListViewPaging";
 //    }
 
+	private void alert(String string) {
+		// TODO Auto-generated method stub
+		
+	}
+
 	//회원가입창으로 넘어가는 화면
 	@RequestMapping(value = "/GotoClientRegistration", method = { RequestMethod.POST, RequestMethod.GET })
     public String GotoClientRegistration(Model model) {
@@ -124,14 +129,14 @@ public class BoardController {
 
 		
 		loginInfo logininfo=new loginInfo();
-		
+		System.out.println(req.getParameter("idd"));
 	
 		logininfo.setNm(req.getParameter("nm"));
 		logininfo.setBirthday(req.getParameter("birthday"));
 		logininfo.setIdd(req.getParameter("idd"));
 		logininfo.setPasswd(req.getParameter("passwd"));
-
 		logininfo.setPhonenum(req.getParameter("phonenum"));
+	
 		
 
 		boardRepository.save(logininfo);
@@ -152,17 +157,25 @@ public class BoardController {
   public String checkLogin(HttpServletRequest req,Model model) {
 		
 	  String idd=req.getParameter("idd");
-	  String passwd=req.getParameter("passwd");
-	  
-	List<loginInfo> logininfo=boardRepository.findByIddAndPasswd(idd, passwd);
-	Long count=boardRepository.countByIddAndPasswd(idd, passwd);
-	
-	  if(count==0)
+	  String passwd=req.getParameter("passwd");	  
+	  System.out.println(Integer.parseInt(idd));
+	  loginInfo logstate= boardRepository.getOne(Integer.parseInt(idd));
+	  //List<loginInfo> logininfo=boardRepository.findByIddAndPasswd(idd, passwd);
+	  Long size=boardRepository.countByIddAndPasswd(idd, passwd);
+	 
+	  if(size==0)
 	  {		 
 		  return "GotoLogIn.html";
-	  }else
-	  { model.addAttribute("logininfo", logininfo);
-	  model.addAttribute("msg","로그인완료"); }
+	  }else 
+	  {
+      userlogin.setLogin(true);
+      userlogin.setWriter(logstate.getNm());
+      model.addAttribute("logininfo", logstate);
+	  model.addAttribute("msg","로그인완료");
+	  
+//	  model.addAttribute("login1",userlogin.setLogin(true));
+//	  model.addAttribute("login2",userlogin.getWriter(logininfo.));
+	  }
       return "redirect:/boardListView";
   }
 	
