@@ -39,9 +39,15 @@ function GotoLogIn(){
 }
 </script>
 <body> 
+	
+	<span th:if="${loginName != null}" th:text="${loginName} + ' 환영합니다.'"  ></span>
+	
+	
 	<form name="boardList">
-	<a class="button is-primary" align="right" onclick="javascript:GotoClientRegistration()">회원가입</a>
- 	<a class="button is-primary" align="right" onclick="javascript:GotoLogIn()">로그인</a>
+	<div th:if="${loginName == null}" >	
+		<a class="button is-primary" align="right" onclick="javascript:GotoClientRegistration()">회원가입</a>
+	 	<a class="button is-primary" align="right" onclick="javascript:GotoLogIn()">로그인</a>
+    </div>
     <input type="hidden" name="bbsno">
     <table width="100%">
             <tr>

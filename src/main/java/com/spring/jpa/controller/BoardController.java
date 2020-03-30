@@ -1,9 +1,19 @@
 package com.spring.jpa.controller;
 
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
-import javax.servlet.http.HttpServletRequest;
-import javax.validation.constraints.Size;
+import java.util.Optional;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import javax.validation.constraints.Size;
+import javax.xml.ws.Response;
+
+import org.dom4j.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -38,18 +48,25 @@ public class BoardController {
 	BoardService boardService;
 
 	userLogin userlogin=new userLogin();
+	SimpleDateFormat format1=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+	
+	Date time = new Date();
+	String whattime=format1.format(time); 
 	
 	
 	
 	// 게시판 프로그램 첫 화면
 	@RequestMapping(value = "/boardListView", method = { RequestMethod.POST, RequestMethod.GET })
-	public String boardIndex(Model model) {
+	public String boardIndex(Model model, HttpSession session) {
 
 		List<post> post=postRepository.findAll();
 //		List<loginInfo> listBoard = boardRepository.findAll();
 //		List<loginInfofo> listBoard = boardRepository.findAll(Sort.by(Sort.Direction.DESC, "bbsno"));
 		
-		model.addAttribute("post", post);
+		model.addAttribute("post", post);		
+		model.addAttribute("loginName", session.getAttribute("loginName"));
+		System.out.println("확인");
+		System.out.println(session.getAttribute("loginName"));
 
 		return "boardListView";
 	}
@@ -66,8 +83,8 @@ public class BoardController {
 	
 	// 게시글 작성 화면 이동 컨트롤러
 	@RequestMapping(value = "/boardWriteView", method = { RequestMethod.POST, RequestMethod.GET })
-	public String boardWriteView() {
-
+	public String boardWriteView(HttpSession session,Model model) {
+		model.addAttribute("loginName",session.getAttribute("loginName"));		
 		return "boardWriteView";
 	}
 
@@ -75,15 +92,19 @@ public class BoardController {
 	
 	// 게시글 db등록 컨트롤러
 	@RequestMapping(value = "/boardWriteAction", method = { RequestMethod.POST, RequestMethod.GET })
-	public String boardWriteAction(HttpServletRequest req) {
+	public String boardWriteAction(HttpServletRequest req,HttpSession session) {
 
+		
+		
+		
 		post Post = new post();
 		Post.setBbsno(Integer.parseInt(req.getParameter("bbsno")));
 		Post.setContentt(req.getParameter("contentt"));
-		Post.setDaydate(req.getParameter("daydate"));
+		Post.setDaydate(whattime);
+		System.out.println("제목 : " + req.getParameter("title"));
 		Post.setTitle(req.getParameter("title"));
-		Post.setWriter(req.getParameter("writer"));
-
+		System.out.println("작성자 : " + req.getParameter("writer"));
+		Post.setWriter(session.getAttribute("loginName").toString());
 		postRepository.save(Post);
 
 		return "redirect:/boardListView";
@@ -154,27 +175,40 @@ public class BoardController {
 	
 	//로그인 확인 
 	@RequestMapping(value = "/checkLogin", method = { RequestMethod.POST, RequestMethod.GET })
-  public String checkLogin(HttpServletRequest req,Model model) {
+  public String checkLogin(HttpServletRequest req, HttpServletResponse response,
+		  	Model model, HttpSession session) {
 		
 	  String idd=req.getParameter("idd");
 	  String passwd=req.getParameter("passwd");	  
-	  System.out.println(Integer.parseInt(idd));
-	  loginInfo logstate= boardRepository.getOne(Integer.parseInt(idd));
+
+	  
+	  Optional<loginInfo> logstate= boardRepository.findById(idd);
 	  //List<loginInfo> logininfo=boardRepository.findByIddAndPasswd(idd, passwd);
 	  Long size=boardRepository.countByIddAndPasswd(idd, passwd);
-	 
-	  if(size==0)
-	  {		 
-		  return "GotoLogIn.html";
+	  
+	  System.out.println(logstate);
+	  if(!logstate.isPresent())
+	  {	  alert("해당하는 아이다가 없습니다.");
+	  response.setContentType("text/html; charset=UTF-8");
+      PrintWriter out;
+	try {
+		out = response.getWriter();
+		out.println("<script>alert('로그인 정보를 확인해주세요.'); history.go(-1);</script>");
+	    out.flush();
+	    return "redirect:/GotoLogIn";
+
+	} catch (IOException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
+
+
+      
 	  }else 
 	  {
       userlogin.setLogin(true);
-      userlogin.setWriter(logstate.getNm());
-      model.addAttribute("logininfo", logstate);
-	  model.addAttribute("msg","로그인완료");
-	  
-//	  model.addAttribute("login1",userlogin.setLogin(true));
-//	  model.addAttribute("login2",userlogin.getWriter(logininfo.));
+      userlogin.setWriter(logstate.get().getNm());
+      session.setAttribute("loginName", logstate.get().getNm());
 	  }
       return "redirect:/boardListView";
   }

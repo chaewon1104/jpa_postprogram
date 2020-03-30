@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-public interface BoardRepository extends JpaRepository<loginInfo, Integer>{
+public interface BoardRepository extends JpaRepository<loginInfo, String>{
 	Long countByIddAndPasswd(String idd,String passwd);	
 	List<loginInfo> findByIddAndPasswd(String idd,String passwd);
 	
