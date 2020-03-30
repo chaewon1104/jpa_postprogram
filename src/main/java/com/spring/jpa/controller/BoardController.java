@@ -71,10 +71,6 @@ public class BoardController {
 		return "boardListView";
 	}
 
-	/*
-	 * public Sort sortByIdAsc() { return new Sort(Sort.Direction.ASC,"bbsno"); }
-	 */
-
 
 	
 	
@@ -121,17 +117,6 @@ public class BoardController {
 		model.addAttribute("postenty", Post);
 		return "boardReadView.html";
 	}
-//	
-//	@RequestMapping(value = "/boardListViewPaging", method = { RequestMethod.POST, RequestMethod.GET })
-//    public String boardIndexPaging(@PageableDefault Pageable pageable, Model model) {
-//		
-//        Page<Board> boardList = boardService.getBoardList(pageable);
-//        //Page<Board> boardList = boardService.getBoardList(Sort.by(Sort.Direction.DESC, "bbsno"));
-//
-//        model.addAttribute("listBoard", boardList);
-//
-//        return "boardListViewPaging";
-//    }
 
 	private void alert(String string) {
 		// TODO Auto-generated method stub
@@ -212,6 +197,18 @@ public class BoardController {
 	  }
       return "redirect:/boardListView";
   }
+	
+	
+	
+	
+	// 로그아웃 컨트롤러
+	@RequestMapping(value = "/logout", method = { RequestMethod.POST, RequestMethod.GET })
+	public String logout(Model model, HttpSession session) {
+		session.invalidate();
+		return "redirect:/boardListView";
+	}
+	
+	
 	
 	
 
