@@ -22,12 +22,13 @@ import lombok.Setter;
 @Table(name="post")
 public class post {
 
-	@Id
+
 	//@GeneratedValue(strategy=GenerationType.SEQUENCE,generator="BBSNO_SEQ_GENERATOR")
 	private String title;
 	private String contentt;
 	private String writer;
 	private String daydate;
+	@Id
 	private int bbsno;
 	public int getBbsno() {
 		return bbsno;

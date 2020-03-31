@@ -2,6 +2,7 @@ package com.spring.jpa.controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.Writer;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -11,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.validation.constraints.Size;
+import javax.websocket.Session;
 import javax.xml.ws.Response;
 
 import org.dom4j.util.StringUtils;
@@ -65,8 +67,7 @@ public class BoardController {
 		
 		model.addAttribute("post", post);		
 		model.addAttribute("loginName", session.getAttribute("loginName"));
-		System.out.println("확인");
-		System.out.println(session.getAttribute("loginName"));
+
 
 		return "boardListView";
 	}
@@ -77,11 +78,30 @@ public class BoardController {
 	
 	
 	
-	// 게시글 작성 화면 이동 컨트롤러
+	// 게시글 작성 화면 이동 컨트롤러(글쓰기버튼)
 	@RequestMapping(value = "/boardWriteView", method = { RequestMethod.POST, RequestMethod.GET })
-	public String boardWriteView(HttpSession session,Model model) {
-		model.addAttribute("loginName",session.getAttribute("loginName"));		
+	public String boardWriteView(HttpSession session,Model model,HttpSession session1,HttpServletResponse response) {
+		if(session.getAttribute("loginName")==null) {
+			
+			 response.setContentType("text/html; charset=UTF-8");
+		      PrintWriter out;
+			try {
+				out = response.getWriter();
+				out.println("<script>alert('로그인이 필요합니다.'); history.go(-1);</script>");
+			    out.flush();
+			   
+
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		    return "GotoLogIn.html";
+			}
+			
+		else {
+		model.addAttribute("loginName",session1.getAttribute("loginName"));		
 		return "boardWriteView";
+		}
 	}
 
 	
@@ -89,8 +109,6 @@ public class BoardController {
 	// 게시글 db등록 컨트롤러
 	@RequestMapping(value = "/boardWriteAction", method = { RequestMethod.POST, RequestMethod.GET })
 	public String boardWriteAction(HttpServletRequest req,HttpSession session) {
-
-		
 		
 		
 		post Post = new post();
@@ -112,8 +130,7 @@ public class BoardController {
 	@RequestMapping(value = "/boardReadView", method = { RequestMethod.POST })
 	public String boardReadView(Model model,HttpServletRequest req) {
 		int bbsno=Integer.parseInt(req.getParameter("bbsno"));
-		post Post = postRepository.getOne(Integer.parseInt(req.getParameter("bbsno")));
-		System.out.println(Post.getWriter());
+		post Post = postRepository.getOne(bbsno);
 		model.addAttribute("postenty", Post);
 		return "boardReadView.html";
 	}
@@ -159,56 +176,59 @@ public class BoardController {
   public String checkLogin(HttpServletRequest req, HttpServletResponse response,
 		  	Model model, HttpSession session) {
 		
-	  String idd=req.getParameter("idd");
-	  String passwd=req.getParameter("passwd");	  
-
-	  
-	  Optional<loginInfo> logstate= boardRepository.findById(idd);
-	  loginInfo loginId=boardRepository.findByIdd(idd);
-	  String passss=loginId.getPasswd();
-	  
-	  
-	  System.out.println(logstate);
-	  if(!logstate.isPresent())
-	  {
-	  response.setContentType("text/html; charset=UTF-8");
-      PrintWriter out;
-	try {
-		out = response.getWriter();
-		out.println("<script>alert('아이디가 일치하지않습니다.'); history.go(-1);</script>");
-	    out.flush();
-	    return "redirect:/GotoLogIn";
-
-	} catch (IOException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	}
-}
-	  else 
-	  {
+		  String idd=req.getParameter("idd");
+		  String passwd=req.getParameter("passwd");	  
 		  
-	  if(!passss.equals(passwd)) {
-		  response.setContentType("text/html; charset=UTF-8");
-		  PrintWriter out;
 		  try {
-			out=response.getWriter();
-			out.println("<script>alert('비밀번호가 다릅니다'); history.go(-1);</script>");
-			out.flush();
-			return "redirect:/GotoLogIn";
-		  } catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+			  Optional<loginInfo> logstate= boardRepository.findById(idd);
+			  loginInfo loginId=boardRepository.findByIdd(idd);
+			  String passss=loginId.getPasswd();
+			  
+			  if(!passss.equals(passwd)) {
+				  response.setContentType("text/html; charset=UTF-8");
+				  PrintWriter out;
+				  try {
+					out=response.getWriter();
+					out.println("<script>alert('비밀번호가 다릅니다'); history.go(-1);</script>");
+					out.flush();
+					return "redirect:/GotoLogIn";
+				  } catch (IOException ioexception) {
+					// TODO Auto-generated catch block
+					  ioexception.printStackTrace();
+				}
+				  
+			  }
+			  else {
+			      userlogin.setLogin(true);
+			      userlogin.setWriter(logstate.get().getNm());
+			      session.setAttribute("loginName", logstate.get().getNm());
+				  }
+			      return "redirect:/boardListView";
 		  
-	  }
+			  
+			  
+			  
+		  }
 		  
-	  else {
-      userlogin.setLogin(true);
-      userlogin.setWriter(logstate.get().getNm());
-      session.setAttribute("loginName", logstate.get().getNm());
-	  }}
-      return "redirect:/boardListView";
-  }
+		  
+		  //아이디가 없을 경우
+		  catch(NullPointerException nullpointexception) {
+			  response.setContentType("text/html; charset=UTF-8");
+		      PrintWriter out;
+		      try {
+		  		out = response.getWriter();
+		  		out.println("<script>alert('아이디가 일치하지않습니다.'); history.go(-1);</script>");
+		  	    out.flush();
+		  	    return "GotoLogIn.html";
+		  	} catch (IOException ioexception) {
+		  		// TODO Auto-generated catch block
+		  		ioexception.printStackTrace();
+				return "redirect:/GotoLogIn";
+		  	}		          
+		  }
+}
+
+  
 	
 	
 	
