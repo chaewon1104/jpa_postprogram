@@ -11,6 +11,7 @@ import org.springframework.data.repository.query.Param;
 public interface BoardRepository extends JpaRepository<loginInfo, String>{
 	Long countByIddAndPasswd(String idd,String passwd);	
 	List<loginInfo> findByIddAndPasswd(String idd,String passwd);
+	loginInfo findByIdd(String idd);
 	
 //	@Query(value = "select * from logininfo a where a.name = :name and a.passwd= :passwd")
 //	List<loginInfo> findByIddAndPasswd(@Param("idd") String idd,@Param("passwd") String passwd);

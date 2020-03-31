@@ -118,10 +118,6 @@ public class BoardController {
 		return "boardReadView.html";
 	}
 
-	private void alert(String string) {
-		// TODO Auto-generated method stub
-		
-	}
 
 	//회원가입창으로 넘어가는 화면
 	@RequestMapping(value = "/GotoClientRegistration", method = { RequestMethod.POST, RequestMethod.GET })
@@ -168,17 +164,18 @@ public class BoardController {
 
 	  
 	  Optional<loginInfo> logstate= boardRepository.findById(idd);
-	  //List<loginInfo> logininfo=boardRepository.findByIddAndPasswd(idd, passwd);
-	  Long size=boardRepository.countByIddAndPasswd(idd, passwd);
+	  loginInfo loginId=boardRepository.findByIdd(idd);
+	  String passss=loginId.getPasswd();
+	  
 	  
 	  System.out.println(logstate);
 	  if(!logstate.isPresent())
-	  {	  alert("해당하는 아이다가 없습니다.");
+	  {
 	  response.setContentType("text/html; charset=UTF-8");
       PrintWriter out;
 	try {
 		out = response.getWriter();
-		out.println("<script>alert('로그인 정보를 확인해주세요.'); history.go(-1);</script>");
+		out.println("<script>alert('아이디가 일치하지않습니다.'); history.go(-1);</script>");
 	    out.flush();
 	    return "redirect:/GotoLogIn";
 
@@ -186,15 +183,30 @@ public class BoardController {
 		// TODO Auto-generated catch block
 		e.printStackTrace();
 	}
-
-
-      
-	  }else 
+}
+	  else 
 	  {
+		  
+	  if(!passss.equals(passwd)) {
+		  response.setContentType("text/html; charset=UTF-8");
+		  PrintWriter out;
+		  try {
+			out=response.getWriter();
+			out.println("<script>alert('비밀번호가 다릅니다'); history.go(-1);</script>");
+			out.flush();
+			return "redirect:/GotoLogIn";
+		  } catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		  
+	  }
+		  
+	  else {
       userlogin.setLogin(true);
       userlogin.setWriter(logstate.get().getNm());
       session.setAttribute("loginName", logstate.get().getNm());
-	  }
+	  }}
       return "redirect:/boardListView";
   }
 	
